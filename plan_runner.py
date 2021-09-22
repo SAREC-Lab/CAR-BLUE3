@@ -1,14 +1,16 @@
 import rospy
 import smach
 import smach_ros
-
+import json
+from states import Parser, Controller, Drive, Turn, Stop, Circle, ThreePoint
 
 
 def main():
     rospy.init_node('plan_runner')
 
-    # TODO: Do initial parsing into some indexable data structure
-    plan = list()
+    # TODO: Determine how to get input file (use ROS params?)
+    plan_file = open("")
+    plan = json.load(plan_file)
 
     # TODO: Figure out what to publish to
     control_topic = rospy.get_param("~control_topic", "/car/mux/ackermann_cmd_mux/input/navigation")
