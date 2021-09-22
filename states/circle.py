@@ -7,8 +7,8 @@ from geometry_msgs.msg import Twist
 
 class Circle(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['Exit'])
+        smach.State.__init__(self, outcomes=['Parser'])
         self.counter = 0
 
     def execute(self, userdata):
-        return 'Exit'
+        return 'Parser'
