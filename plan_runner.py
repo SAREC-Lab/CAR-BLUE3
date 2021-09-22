@@ -8,7 +8,7 @@ from states import Parser, Controller, Drive, Turn, Stop, Circle, ThreePoint
 def main():
     rospy.init_node('plan_runner')
 
-    # TODO: Determine how to get input file (use ROS params?)
+    # TODO: Add plan file name, either hard-coded, through a ROS launch param, or command line arg parsing 
     plan_file = open("")
     plan = json.load(plan_file)
 
@@ -18,7 +18,7 @@ def main():
     sm = smach.StateMachine(outcomes=['success'])
     sm.userdata.plan_counter = 0
     sm.userdata.input_plan = plan
-    sm.userdata.inst = None # TODO:Create a class to represent instructions
+    sm.userdata.inst = None 
     #TODO: Check if this is correct publisher setup
     sm.userdata.pub = rospy.Publisher(control_topic, AckermannDriveStamped, queue_size=1)
 
@@ -38,7 +38,7 @@ def main():
         
         # This provides a rough outline of how all the instruction states should look
         # TODO: Check if pub_out is necessary
-        smach.StateMachine.add('FORWARD', Forward(),
+        smach.StateMachine.add('DRIVE', Drive(),
                                 transitions={'complete':'PARSER'},
                                 remapping={'inst_in':'inst',
                                     'pub_in':'pub',
