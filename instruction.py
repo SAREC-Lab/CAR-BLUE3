@@ -1,6 +1,6 @@
 # Stub class, can be expanded based on how instructions are to be defined
 class Instruction:
-    def __init__(self, inst, arg1, arg2):
-        self.inst = inst
-        self.arg1 = arg1
-        self.arg2 = arg2
+    def __init__(self, command, direction, value):
+        self.command = command
+        self.direction = direction
+        self.value = value
