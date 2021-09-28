@@ -16,12 +16,16 @@ mapping = {
 class Parser(smach.State):
     def __init__(self):
         smach.State.__init__(self,
-                            outcomes=['driving','turning','circle','three_point','stopping'])
+                            input_keys=["input_plan_in", "plan_counter_in"],
+                            output_keys=["plan_counter_out"],
+                            outcomes=["driving","success"]) # list(mapping.values())
 
     def execute(self, userdata):
-        if len(userdata.input_plan) > 0:
+        rospy.loginfo('Start Parsing')
+        if len(userdata.input_plan_in) > userdata.plan_counter_in + 1:
             rospy.loginfo('Parsing command')
-            userdata.inst = userdata.input_plan.pop(0)  
-            return mapping[userdata.inst["command"]]
+            userdata.plan_counter_out = userdata.plan_counter_in + 1
+            return mapping[userdata.input_plan_in[0]["command"]]
         else:
+            rospy.loginfo('No More plan to execute')
             return 'success'

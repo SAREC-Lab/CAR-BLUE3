@@ -2,13 +2,13 @@
     {
         "command": "drive",
         "value":[
-            5
+            -20
         ]
     },
     {
         "command": "drive",
         "value":[
-            -2
+            10
         ]
     }
 ]
