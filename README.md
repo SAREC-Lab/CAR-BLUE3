@@ -8,9 +8,16 @@
 
 ## How to Run the Car
 
-1. Run `roslaunch mushr_base teleop.launch` or `roslaunch mushr_sim teleop.launch` for simulation
+### Real Car
+
+1. Run `roslaunch mushr_base teleop.launch`
 2. Run `roslaunch CAR-BLUE3 path_publisher.launch`
     1. To specify the plan file, `roslaunch CAR-BLUE3 path_publisher.launch plan_file:='/path/to/plan.txt'`
+
+### Simulation
+1. `roslaunch mushr_sim teleop.launch`
+2. `rosrun rviz rviz -d $HOME/catkin_ws/src/mushr/mushr_utils/rviz/default.rviz`
+3. `roslaunch CAR-BLUE3 path_publisher.launch`
 
 *Don’t forget: $ shutdown now*
 
