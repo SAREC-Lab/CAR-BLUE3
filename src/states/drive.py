@@ -3,7 +3,6 @@
 import rospy
 import smach
 import time
-from geometry_msgs.msg import Twist
 from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
 
 METER_CONVERSION = 0.3048
@@ -24,17 +23,18 @@ class Drive(smach.State):
 
         rate = rospy.Rate(10)
 
-        if direction: 
+        if distance < 0: 
             SPEED = SPEED*(-1) # check reverse or forward
+            distance = distance*(-1)
 
         drive = AckermannDrive(steering_angle=0, speed=SPEED)
 
         # loop until distance is reached, publishing the message 
         while abs(current_distance) < distance:
-            $PUBLISHER.publish(AckermannDriveStamped(drive=drive))
+            userdata.pub.publish(AckermannDriveStamped(drive=drive))
             t1 = rospy.Time.now().to_sec()
             current_distance = SPEED * (t1 - t0)
 
         rospy.sleep(1)
 
-        return 'Parser'
+        return 'complete'

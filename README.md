@@ -1,12 +1,18 @@
 # Car - Blue 3
 
-## Project 01
-
 ## Environment Setup
 
 1. Clone this repo under directory `catkin_ws/src/`
 
 2. Run `catkin_make` to install this package
+
+## How to Run the Car
+
+1. Run `roslaunch mushr_base teleop.launch` or `roslaunch mushr_sim teleop.launch` for simulation
+2. Run `roslaunch CAR-BLUE3 path_publisher.launch`
+    1. To specify the plan file, `roslaunch CAR-BLUE3 path_publisher.launch plan_file:='/path/to/plan.txt'`
+
+*Don’t forget: $ shutdown now*
 
 ### Important Links
 [Github Repository](https://github.com/SAREC-Lab/CAR-BLUE3/tree/main) <br />

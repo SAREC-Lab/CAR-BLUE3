@@ -1,21 +1,27 @@
 #!/usr/bin/env python
 
-import roslib
 import rospy
 import smach
-import smach_ros
-from instruction import Instruction
+
+
+# a mapping from the command in `plan_file` to its corresponding state outcome
+mapping = {
+    "drive": "driving",
+    "turn": "turning",
+    "stop": "stopping",
+    "circle": "circle",
+    "three_point": "three_point"
+}
 
 class Parser(smach.State):
     def __init__(self):
         smach.State.__init__(self,
-                            outcomes=['parsed'],
-                            input_keys=['task_plan_in', 'counter_in'],
-                            output_keys=['counter_out', 'inst_out'])
+                            outcomes=['driving','turning','circle','three_point','stopping'])
 
     def execute(self, userdata):
-        rospy.loginfo('Parsing command')
-        inst_dict = userdata.task_plan_in[userdata.counter_in]
-        userdata.inst_out = Instruction(inst_dict['command'], inst_dict['direction'], inst_dict['value'])
-        userdata.counter_out = userdata.counter_in + 1
-        return 'parsed' 
+        if len(userdata.input_plan) > 0:
+            rospy.loginfo('Parsing command')
+            userdata.inst = userdata.input_plan.pop(0)  
+            return mapping[userdata.inst["command"]]
+        else:
+            return 'success'
