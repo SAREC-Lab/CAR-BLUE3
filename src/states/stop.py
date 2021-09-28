@@ -3,7 +3,6 @@
 import rospy
 import smach
 import time
-from geometry_msgs.msg import Twist
 from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
 
 class Stop(smach.State):
