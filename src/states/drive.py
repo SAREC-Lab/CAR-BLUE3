@@ -3,20 +3,21 @@
 import rospy
 import smach
 import time
-from geometry_msgs.msg import Twist
 from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
 
 METER_CONVERSION = 0.3048
 SPEED = 1 # default 1 m/s 
 
 class Drive(smach.State):
-    def __init__(self):
-        smach.State.__init__(self, outcomes=['Parser'])
-        self.counter = 0
+    def __init__(self,publisher):
+        smach.State.__init__(self,input_keys=["plan_counter_in","input_plan_in"],outcomes=['complete'])
+        self.pub = publisher
 
     def execute(self, userdata):
-        distance = float(userdata.inst_in.value) # distance in feet
-        direction = float(userdata.inst_in.direction) # forward = 0 or reverse = 1
+        rospy.loginfo("Start Driving")
+        counter = userdata.plan_counter_in
+        distance = float(userdata.input_plan_in[counter]["value"][0]) # distance in feet
+        direction = float(userdata.input_plan_in[counter]["value"][1]) # forward = 0 or reverse = 1
 
         distance = distance * METER_CONVERSION - 0.15 # convert from feet to meters 
         current_distance = 0
@@ -24,17 +25,20 @@ class Drive(smach.State):
 
         rate = rospy.Rate(10)
 
+        speed = SPEED
         if direction: 
-            SPEED = SPEED*(-1) # check reverse or forward
+            speed = speed*(-1) # check reverse or forward
+            # distance = distance*(-1)
 
-        drive = AckermannDrive(steering_angle=0, speed=SPEED)
+        drive = AckermannDrive(steering_angle=0, speed=speed)
 
         # loop until distance is reached, publishing the message 
         while abs(current_distance) < distance:
-            $PUBLISHER.publish(AckermannDriveStamped(drive=drive))
+            self.pub.publish(AckermannDriveStamped(drive=drive))
             t1 = rospy.Time.now().to_sec()
-            current_distance = SPEED * (t1 - t0)
+            current_distance = speed * (t1 - t0)
+            rate.sleep()
 
         rospy.sleep(1)
 
-        return 'Parser'
+        return 'complete'

@@ -1,48 +1,57 @@
+#!/usr/bin/env python
+
 import rospy
 import smach
-import smach_ros
+from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
 import json
-from states import Parser, Controller, Drive, Turn, Stop, Circle, ThreePoint
+from states import Parser, Drive
 
 
 def main():
-    rospy.init_node('plan_runner')
-
+    rospy.init_node("plan_runner")
     # TODO: Add plan file name, either hard-coded, through a ROS launch param, or command line arg parsing 
-    plan_file = open("")
-    plan = json.load(plan_file)
+    plan_file = rospy.get_param("~plan_file")
+    with open(plan_file,'r') as f:
+        plan = json.load(f)
 
+    # init_pose_topic = rospy.get_param("~init_pose_topic", "/initialpose")
+    # pub_init_pose = rospy.Publisher(init_pose_topic, PoseWithCovarianceStamped, queue_size=1)
     # TODO: Figure out what to publish to
     control_topic = rospy.get_param("~control_topic", "/car/mux/ackermann_cmd_mux/input/navigation")
     
     sm = smach.StateMachine(outcomes=['success'])
-    sm.userdata.plan_counter = 0
-    sm.userdata.input_plan = plan
-    sm.userdata.inst = None 
+    sm.userdata.plan_counter = -1 # the index of plan that is running
+    sm.userdata.input_plan = plan # a list of plans waiting to be executed
     #TODO: Check if this is correct publisher setup
-    sm.userdata.pub = rospy.Publisher(control_topic, AckermannDriveStamped, queue_size=1)
+    publisher = rospy.Publisher(control_topic, AckermannDriveStamped, queue_size=1) # userdata can only pass basic data types (immutable)
 
     with sm:
+        rospy.loginfo("Build State Machine")
         smach.StateMachine.add('PARSER', Parser(),
-                            transitions={'parsed':'CONTROLLER'},
-                            remapping={'task_plan_in':'input_plan',
-                                    'counter_in':'plan_counter',
-                                    'counter_out':'plan_counter',
-                                    'inst_out':'inst'})
+                            remapping={
+                                'input_plan_in':'input_plan',
+                                'plan_counter_in' : 'plan_counter',
+                                'plan_counter_out' : 'plan_counter'
+                            },
+                            transitions={'driving':'DRIVE'}) # TODO: add map to all different states
         
-        # TODO: Add transitions/states for every possible instruction 
-        smach.StateMachine.add('CONTROLLER', Controller(),
-                                transitions={'forward':'FORWARD',
-                                    'exit':'EXIT'},
-                                remapping={'inst_in':'inst'})
+        # # TODO: Add transitions/states for every possible instruction 
+        # smach.StateMachine.add('CONTROLLER', Controller(),
+        #                         transitions={'forward':'FORWARD',
+        #                             'exit':'EXIT'},
+        #                         remapping={'inst_in':'inst'})
         
         # This provides a rough outline of how all the instruction states should look
         # TODO: Check if pub_out is necessary
-        smach.StateMachine.add('DRIVE', Drive(),
-                                transitions={'complete':'PARSER'},
-                                remapping={'inst_in':'inst',
-                                    'pub_in':'pub',
-                                    'pub_out':'pub'})
-        
-        smach.StateMachine.add('EXIT', Exit(),
-                                transitions={'out':'success'})
+        smach.StateMachine.add('DRIVE', Drive(publisher),
+                            remapping={
+                                'plan_counter_in' : 'plan_counter',
+                                'input_plan_in' : 'input_plan'
+                            },
+                            transitions={'complete':'PARSER'})
+
+    # Execute SMACH plan
+    outcome = sm.execute()
+
+if __name__ == "__main__":
+    main()
