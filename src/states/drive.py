@@ -17,7 +17,7 @@ class Drive(smach.State):
         rospy.loginfo("Start Driving")
         counter = userdata.plan_counter_in
         distance = float(userdata.input_plan_in[counter]["value"][0]) # distance in feet
-        # direction = float(userdata.inst_in.direction) # forward = 0 or reverse = 1
+        direction = float(userdata.input_plan_in[counter]["value"][1]) # forward = 0 or reverse = 1
 
         distance = distance * METER_CONVERSION - 0.15 # convert from feet to meters 
         current_distance = 0
@@ -26,9 +26,9 @@ class Drive(smach.State):
         rate = rospy.Rate(10)
 
         speed = SPEED
-        if distance < 0: 
+        if direction: 
             speed = speed*(-1) # check reverse or forward
-            distance = distance*(-1)
+            # distance = distance*(-1)
 
         drive = AckermannDrive(steering_angle=0, speed=speed)
 
@@ -37,6 +37,7 @@ class Drive(smach.State):
             self.pub.publish(AckermannDriveStamped(drive=drive))
             t1 = rospy.Time.now().to_sec()
             current_distance = speed * (t1 - t0)
+            rate.sleep()
 
         rospy.sleep(1)
 
