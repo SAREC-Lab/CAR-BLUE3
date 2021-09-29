@@ -21,7 +21,7 @@ class Stop(smach.State):
     def execute(self, userdata):
         counter = userdata.plan_counter_in
         secs = userdata.input_plan_in[counter]["value"][0]
-        rospy.loginfo(f"Stop for {secs} seconds")
+        # rospy.loginfo(f"Stop for {secs} seconds")
         rospy.sleep(secs)
         return 'complete'
 

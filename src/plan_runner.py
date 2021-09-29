@@ -36,7 +36,7 @@ def main():
                             transitions={
                                 'driving':'DRIVE',
                                 'circle':'CIRCLE',
-                                'stop':'STOP',
+                                'stopping':'STOP',
                                 }) # TODO: add map to all different states
         
         smach.StateMachine.add('DRIVE', Drive(publisher),

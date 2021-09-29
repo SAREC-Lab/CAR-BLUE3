@@ -48,14 +48,14 @@ def turn_circle(publisher, radius, left, forward, circle_numbers, time=None):
     rate = rospy.Rate(10)
 
     if left: 
-        left_coef = -1
-    else:
         left_coef = 1
+    else:
+        left_coef = -1
     
     if forward: 
-        forward_coef = -1
-    else:
         forward_coef = 1
+    else:
+        forward_coef = -1
     
     steering_angle_velocity = STEERING_ANGLE_VELOCITY*left_coef
     speed = SPEED * forward_coef
