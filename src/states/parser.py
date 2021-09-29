@@ -9,7 +9,7 @@ mapping = {
     "drive": "driving",
     "circle": "circle",
     # "turn": "turning",
-    # "stop": "stopping",
+    "stop": "stopping",
     # "three_point": "three_point"
 }
 

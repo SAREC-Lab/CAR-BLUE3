@@ -9,6 +9,15 @@ from .utils import straight
 METER_CONVERSION = 0.3048
 
 class Drive(smach.State):
+    """
+        {
+        "command": "drive",
+        "value":[
+            20, # how far it goes
+            1 # 1-->forward, 0--> backward
+        ]
+    }
+    """
     def __init__(self,publisher):
         smach.State.__init__(self,input_keys=["plan_counter_in","input_plan_in"],outcomes=['complete'])
         self.pub = publisher

@@ -2,35 +2,81 @@
     {
         "command": "drive",
         "value":[
-            20,
+            2,
             1
         ]
     },
     {
         "command": "drive",
         "value":[
-            10,
+            2,
             0
         ]
     },
     {
         "command": "circle",
         "value":[
-            4,
-            0
+            0.5,
+            1,
+            1,
+            0.25
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.5,
+            1,
+            0,
+            0.25
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.5,
+            0,
+            1,
+            0.25
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.5,
+            0,
+            0,
+            0.25
+        ]
+    },
+    {
+        "command": "stop",
+        "value":[
+            10
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.2,
+            1,
+            1,
+            0.25
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.2,
+            0,
+            0,
+            0.25
         ]
     },
     {
         "command": "drive",
         "value":[
-            10,
-            0
-        ]
-    },
-    {
-        "command": "circle",
-        "value":[
-            4,
+            1,
             1
         ]
     }

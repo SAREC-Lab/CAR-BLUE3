@@ -15,9 +15,22 @@ class Circle(smach.State):
         self.pub = publisher
 
     def execute(self, userdata):
+        """
+            {
+                "command": "circle",
+                "value":[
+                    4, # radius
+                    0, # left circle = 1 or right circle = 0
+                    1, # 1-->forward, 0--> backward
+                    2, # number of circles to travel
+                ]
+            }
+        """
         counter = userdata.plan_counter_in
-        radius = float(userdata.input_plan_in[counter]["value"][0])
-        direction = float(userdata.input_plan_in[counter]["value"][1]) # left = 0 or right = 1
+        radius = userdata.input_plan_in[counter]["value"][0]
+        direction = userdata.input_plan_in[counter]["value"][1]
+        forward = userdata.input_plan_in[counter]["value"][2]
+        num_circle = userdata.input_plan_in[counter]["value"][3]
 
-        turn_circle(self.pub,radius, 1, 1, 1)
+        turn_circle(self.pub,radius, direction, forward, num_circle)
         return 'complete'

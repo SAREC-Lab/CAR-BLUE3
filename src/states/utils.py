@@ -39,40 +39,40 @@ def turn_circle(publisher, radius, left, forward, circle_numbers, time=None):
         time: How fast to accomplish this action
     """
     SPEED = 1
-    STEERING_ANGLE = 0.3
     STEERING_ANGLE_VELOCITY = 0.2
+    DIST_PARAM = 1.18
 
     current_distance = 0
-    distance = circle_numbers* 2 * math.pi * radius
-    t0 = rospy.Time.now().to_sec()
+    distance = 2*math.pi*radius*circle_numbers*DIST_PARAM
 
     rate = rospy.Rate(10)
 
     if left: 
-        left_coef = -1
-    else:
         left_coef = 1
+    else:
+        left_coef = -1
     
     if forward: 
-        forward_coef = -1
-    else:
         forward_coef = 1
+    else:
+        forward_coef = -1
     
-    
-
-    steering_angle = STEERING_ANGLE*left_coef
     steering_angle_velocity = STEERING_ANGLE_VELOCITY*left_coef
     speed = SPEED * forward_coef
 
-
-    drive = AckermannDrive(steering_angle=steering_angle, steering_angle_velocity=steering_angle_velocity, speed=speed)
-
-    current_distance = 0
     # loop until distance is reached, publishing the message 
-    while abs(current_distance) < distance:
+    t0 = rospy.Time.now().to_sec()
+    drive = AckermannDrive(steering_angle=radius2steering(radius)*left_coef, steering_angle_velocity=steering_angle_velocity, speed=speed)
+    while abs(current_distance) <  distance:
         publisher.publish(AckermannDriveStamped(drive=drive))
         t1 = rospy.Time.now().to_sec()
-        current_distance += SPEED / radius * (t1 - t0)
+        current_distance = float(abs(speed) * (t1 - t0))
         rate.sleep()
 
     rospy.sleep(1)
+
+
+def radius2steering(r):
+    L = 0.3
+    x = math.sqrt(r**2-(L/2)**2)
+    return math.atan(L/x)
