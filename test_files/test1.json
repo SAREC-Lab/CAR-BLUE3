@@ -1,0 +1,27 @@
+[
+  {
+    "command": "drive",
+    "speed": 1,
+    "direction": 1
+  },
+  {
+    "command": "stop",
+    "speed": 0,
+    "direction": 0
+  },
+  {
+    "command": "turn",
+    "speed": 1,
+    "direction": 1
+  },
+  {
+    "command": "drive",
+    "speed": 1,
+    "direction": 0
+  },
+  {
+    "command": "stop",
+    "speed": 0
+    "direction": 0
+  }
+]
