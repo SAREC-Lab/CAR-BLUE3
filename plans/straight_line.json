@@ -12,5 +12,26 @@
             10,
             0
         ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            4,
+            0
+        ]
+    },
+    {
+        "command": "drive",
+        "value":[
+            10,
+            0
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            4,
+            1
+        ]
     }
 ]

@@ -4,7 +4,7 @@ import rospy
 import smach
 from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
 import json
-from states import Parser, Drive
+from states import Parser, Drive, Circle
 
 
 def main():
@@ -33,7 +33,10 @@ def main():
                                 'plan_counter_in' : 'plan_counter',
                                 'plan_counter_out' : 'plan_counter'
                             },
-                            transitions={'driving':'DRIVE'}) # TODO: add map to all different states
+                            transitions={
+                                'driving':'DRIVE',
+                                'circle':'CIRCLE'
+                                }) # TODO: add map to all different states
         
         # # TODO: Add transitions/states for every possible instruction 
         # smach.StateMachine.add('CONTROLLER', Controller(),
@@ -44,6 +47,12 @@ def main():
         # This provides a rough outline of how all the instruction states should look
         # TODO: Check if pub_out is necessary
         smach.StateMachine.add('DRIVE', Drive(publisher),
+                            remapping={
+                                'plan_counter_in' : 'plan_counter',
+                                'input_plan_in' : 'input_plan'
+                            },
+                            transitions={'complete':'PARSER'})
+        smach.StateMachine.add('CIRCLE', Circle(publisher),
                             remapping={
                                 'plan_counter_in' : 'plan_counter',
                                 'input_plan_in' : 'input_plan'

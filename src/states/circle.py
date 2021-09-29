@@ -3,45 +3,21 @@
 import rospy
 import smach
 import time
-from geometry_msgs.msg import Twist
 from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
+from .utils import turn_circle
 
 METER_CONVERSION = 0.3048
 
-# default globals
-SPEED = 1
-STEERING_ANGLE = 0.3
-STEERING_ANGLE_VELOCITY = 0.2 
-PI = 3.141592653
 
 class Circle(smach.State):
-    def __init__(self):
-        smach.State.__init__(self, outcomes=['Parser'])
-        self.counter = 0
+    def __init__(self, publisher):
+        smach.State.__init__(self,input_keys=["plan_counter_in","input_plan_in"],outcomes=['complete'])
+        self.pub = publisher
 
     def execute(self, userdata):
-        raidus = float(userdata.inst_in.value)
-        direction = float(userdata.inst_in.direction) # left = 0 or right = 1
+        counter = userdata.plan_counter_in
+        radius = float(userdata.input_plan_in[counter]["value"][0])
+        direction = float(userdata.input_plan_in[counter]["value"][1]) # left = 0 or right = 1
 
-        current_distance = 0
-        distance = 2 * PI * radius
-        t0 = rospy.Time.now().to_sec()
-
-        rate = rospy.Rate(10)
-
-        if direction: 
-            STEERING_ANGLE = STEERING_ANGLE*(-1)
-            STEERING_ANGLE_VELOCITY = STEERING_ANGLE_VELOCITY*(-1)
-
-
-        drive = AckermannDrive(steering_angle=STEERING_ANGLE, steering_angle_velocity=STEERING_ANGLE_VELOCITY, speed=SPEED)
-
-        # loop until distance is reached, publishing the message 
-        while abs(current_distance) < distance:
-            $PUBLISHER.publish(AckermannDriveStamped(drive=drive))
-            t1 = rospy.Time.now().to_sec()
-            current_distance = SPEED / radius * (t1 - t0)
-
-        rospy.sleep(1)
-
-        return 'Parser'
+        turn_circle(self.pub,radius, 1, 1, 1)
+        return 'complete'

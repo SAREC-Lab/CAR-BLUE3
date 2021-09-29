@@ -4,9 +4,9 @@ import rospy
 import smach
 import time
 from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
+from .utils import straight
 
 METER_CONVERSION = 0.3048
-SPEED = 1 # default 1 m/s 
 
 class Drive(smach.State):
     def __init__(self,publisher):
@@ -20,25 +20,6 @@ class Drive(smach.State):
         direction = float(userdata.input_plan_in[counter]["value"][1]) # forward = 0 or reverse = 1
 
         distance = distance * METER_CONVERSION - 0.15 # convert from feet to meters 
-        current_distance = 0
-        t0 = rospy.Time.now().to_sec()
-
-        rate = rospy.Rate(10)
-
-        speed = SPEED
-        if direction: 
-            speed = speed*(-1) # check reverse or forward
-            # distance = distance*(-1)
-
-        drive = AckermannDrive(steering_angle=0, speed=speed)
-
-        # loop until distance is reached, publishing the message 
-        while abs(current_distance) < distance:
-            self.pub.publish(AckermannDriveStamped(drive=drive))
-            t1 = rospy.Time.now().to_sec()
-            current_distance = speed * (t1 - t0)
-            rate.sleep()
-
-        rospy.sleep(1)
+        straight(self.pub, distance,direction,None)
 
         return 'complete'
