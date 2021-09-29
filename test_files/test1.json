@@ -1,27 +1,22 @@
 [
   {
     "command": "drive",
-    "speed": 1,
+    "value": 3,
     "direction": 1
   },
   {
     "command": "stop",
-    "speed": 0,
+    "value": 5,
     "direction": 0
   },
   {
-    "command": "turn",
-    "speed": 1,
-    "direction": 1
+    "command": "circle",
+    "value": [2, 0.5],
+    "direction": [1, 1]
   },
   {
     "command": "drive",
-    "speed": 1,
-    "direction": 0
-  },
-  {
-    "command": "stop",
-    "speed": 0
+    "value": 3,
     "direction": 0
   }
 ]
