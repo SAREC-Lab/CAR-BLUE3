@@ -21,6 +21,12 @@
 
 *Don’t forget: $ shutdown now*
 
+
+### Push Code to the Car
+1. Pull Code to the local repo
+2. Connect to Car's wifi
+3. Go to the parent directory `cd ..` and run `rsync -rlptzv --progress --delete --exclude=.git ./CAR-BLUE3 "robot@10.42.0.1:~/catkin_ws/src"`
+
 ### Important Links
 [Github Repository](https://github.com/SAREC-Lab/CAR-BLUE3/tree/main) <br />
 [Trello Board](https://trello.com/b/wCxuc2UZ/main-project)
