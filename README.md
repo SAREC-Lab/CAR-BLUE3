@@ -45,6 +45,6 @@ R1, D3<br />
 R1, D4<br />
 
 D1, controller.py, parser.py, instruction.py, plan_runner.py<br />
-D2, drive.py, stop.py<br />
-D3, turn.py<br />
-D4, circle.py, three_point.py
+D2, drive.py, stop.py, utils.py<br />
+D3, turn.py, utils.py<br />
+D4, circle.py, three_point.py, utils.py
