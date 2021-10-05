@@ -33,6 +33,10 @@
 
 ## Documentation
 
+### Domain Specific Language
+We used JSON to format our task plans because JSON is a lightweight data formatting language that is easy for humans to read and write, and easy for machines to parse the input. Python, the language of our parser, has a json library which makes it easy to handle JSON objects and files. We utilize functions from this library to easily read in the task plan. 
+Our JSON file has a command and a value. The command represents what the car will be doing. We realized that we can simplify our commands to "drive" "circle" and "stop" by sending in some other values as a part of the value array. For example, for drive we send in a distance and a direction where the direction is a binary value such that forward movement corresponds to 1 and reverse movement corresponds to 0. The same idea is used with circle where leftward movement is 1 and rightward movement is 0. We also realized that a turn is just a quarter circle so we used this knowledge to buff up our circle utils to take in the number of revolutions. Thus, as a part of our JSON input in the value array for command "circle" we have the radius, left/right direction, forward/reverse direction, and number of revolutions where a turn is 0.25 revolutions and a full circle is 1. For "stop", the value is just the number of seconds to remain stopped. 
+
 ### Requirements and Designs
 R1: Create a state machine to handle any driving orders given to a MUSHR car<br />
 D1: Create code that parses & distributes movement plans to the state machine<br />
