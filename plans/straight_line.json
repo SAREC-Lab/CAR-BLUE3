@@ -1,0 +1,92 @@
+[
+    {
+        "command": "drive",
+        "value":[
+            2,
+            1
+        ]
+    },
+    {
+        "command": "drive",
+        "value":[
+            2,
+            0
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.4,
+            1,
+            1,
+            0.25
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.4,
+            1,
+            0,
+            0.25
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.4,
+            0,
+            1,
+            0.25
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.4,
+            0,
+            0,
+            0.25
+        ]
+    },
+    {
+        "command": "stop",
+        "value":[
+            10
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.4,
+            1,
+            1,
+            0.25
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            0.4,
+            0,
+            0,
+            0.25
+        ]
+    },
+    {
+        "command": "drive",
+        "value":[
+            1,
+            1
+        ]
+    },
+    {
+        "command": "circle",
+        "value":[
+            1,
+            1,
+            1,
+            1
+        ]
+    }
+]
