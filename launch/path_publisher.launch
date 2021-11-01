@@ -1,0 +1,11 @@
+<launch>
+    <arg name="control_topic" default="/car/mux/ackermann_cmd_mux/input/navigation" />
+    <arg name="init_pose_topic" default="/initialpose" />
+    <arg name="plan_file" default="$(find CAR-BLUE3)/plans/straight_line.json" />
+
+    <node pkg="CAR-BLUE3" type="plan_runner.py" name="plan_runner" output="screen">
+        <param name="control_topic" value="$(arg control_topic)" />
+        <param name="init_pose_topic" value="$(arg init_pose_topic)" />
+        <param name="plan_file" value="$(arg plan_file)" />
+    </node>
+</launch>

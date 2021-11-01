@@ -1,0 +1,27 @@
+[
+  {
+    "command": "drive",
+    "value": 4,
+    "direction": 1
+  },
+  {
+    "command": "circle",
+    "value": [2, 1],
+    "direction": [1, 1]
+  },
+  {
+    "command": "stop",
+    "value": 3,
+    "direction": 0
+  },
+  {
+    "command": "circle",
+    "value": [2, 0.5],
+    "direction": [1, 1]
+  },
+  {
+    "command": "drive",
+    "value": 4,
+    "direction": 1
+  },
+]
