@@ -18,7 +18,7 @@ kwargs = {
     'max_speed': 0.2,
 }
 
-scan_monitor = ScanTwistCenterControlNode(scan_topic="/scan", pub_topic="cmd_vel",
+scan_monitor = ScanTwistCenterControlNode(scan_topic="/car/scan", pub_topic="/car/mux/ackermann_cmd_mux/input/navigation",
                                           policy='LHR', helper_controller= None, **kwargs)
 #run
 if __name__ == "__main__":

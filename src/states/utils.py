@@ -1,5 +1,6 @@
 import rospy
 import math
+import numpy as np
 from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
 
 def straight(publisher, distance, forward, time=None):
@@ -76,3 +77,20 @@ def radius2steering(r):
     L = 0.3
     x = math.sqrt(r**2-(L/2)**2)
     return math.atan(L/x)
+
+
+def moving_average(arr,neighbor_size=5):
+    # assume arr is 1-d
+    arr = np.array(arr)
+    result = np.zeros_like(arr)
+    for i in range(arr.shape[0]):
+        if i - neighbor_size <0:
+            smooth_sum = np.nanmean(arr[i-neighbor_size:i+neighbor_size+1])
+        elif i+neighbor_size>arr.shape[0]:
+            smooth_sum = np.nanmean(arr[i-neighbor_size:i+neighbor_size-arr.shape[0]+1])
+        else:
+            smooth_sum = np.nanmean(arr[i-neighbor_size:i-neighbor_size+1])
+        # smooth = smooth_sum/(2*neighbor_size+1)
+        result[i] = smooth_sum
+    return result
+            

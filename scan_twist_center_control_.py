@@ -4,10 +4,12 @@
 
 import rospy
 
-from src.states.utils import straight,turn_circle
+import numpy as np
+from src.states.utils import straight,turn_circle, moving_average
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 import math
+from ackermann_msgs.msg import AckermannDrive, AckermannDriveStamped
 
 from policy._left_or_right_hand_rule import LeftOrRightHandRule
 
@@ -33,6 +35,8 @@ class ScanTwistCenterControlNode:
         ##/:: Register helper controller for robot movement
         if helper_controller:
             self.helper_controller = helper_controller(direction=self.direction, distance_to_wall=self.dis_to_wall_desired)
+        else:
+            self.helper_controller = None
 
 
         self.min_distance = 0.0  # Distance closest to robot measured
@@ -60,10 +64,10 @@ class ScanTwistCenterControlNode:
         self.scan_sub = rospy.Subscriber(self.scan_topic_name, LaserScan, self._call_back)
 
         ##/:: Register robot speed publisher
-        self.cmd_vel_pub = rospy.Publisher(self.pub_topic_name, Twist, queue_size=1)
+        self.cmd_vel_pub = rospy.Publisher(self.pub_topic_name, AckermannDriveStamped, queue_size=1)
 
         self.twist = Twist()
-
+        print("start")
         while not rospy.is_shutdown():  # running until being interrupted manually
             continue
         straight(self.cmd_vel_pub,0,1)
@@ -76,34 +80,40 @@ class ScanTwistCenterControlNode:
     def _call_back(self, msg):
         self.twist = Twist()
 
-        ranges = [0 for i in range(360)]
-
+        # ranges = [0 for i in range(360)]
+        ranges = np.array(msg.ranges)
         ##! Deal with 360 lidar raw data,
         ##! 0 reading when distance out of range, convert to huge data 100
-        for i in range(180):
-            if msg.ranges[i + 180] == 0:
-                ranges[i] = 100
-            else:
-                ranges[i] = msg.ranges[i + 180]
+        # for i in range(180):
+        #     if msg.ranges[i + 180] == 0:
+        #         ranges[i] = 100
+        #     else:
+        #         ranges[i] = msg.ranges[i + 180]
 
-            if msg.ranges[i] == 0:
-                ranges[i + 180] = 100
-            else:
-                ranges[i + 180] = msg.ranges[i]
+        #     if msg.ranges[i] == 0:
+        #         ranges[i + 180] = 100
+        #     else:
+        #         ranges[i + 180] = msg.ranges[i]
 
-        size = len(ranges)
+        size = ranges.shape[0]
+        ranges = moving_average(ranges)
 
-        read_from_idx = size * (self.direction + 1) / 4  # 180-360 for direction 1 (LHR policy)
-        read_to_idx = size * (self.direction + 3) / 4  # 0-180 for direction -1 (RHR policy )
+        # read_from_idx = size * (self.direction + 1) / 4  # 180-360 for direction 1 (LHR policy)
+        # read_to_idx = size * (self.direction + 3) / 4  # 0-180 for direction -1 (RHR policy )
 
-        half_ranges = ranges[read_from_idx: read_to_idx]
+        # half_ranges = ranges[read_from_idx: read_to_idx]
 
-        min_idx = ranges.index(min(half_ranges))  # Get index of direction with closest distance
+        # min_idx = ranges.index(min(half_ranges))  # Get index of direction with closest distance
 
-        self.distance_front = ranges[size / 2]      # Get distance at front
+        front_idx = np.absolute(np.arange(size)*msg.angle_increment-math.pi).argmin()
+        self.distance_front = ranges[front_idx]      # Get distance at front
+        min_idx = ranges.argmin()
         self.min_distance = ranges[min_idx]         # Get closest distance
-        self.angle_with_closet_obstacle = (min_idx - size / 2) * msg.angle_increment  # Calculate angle of closest distance
+        self.angle_with_closet_obstacle = min_idx #(min_idx - size / 2) * msg.angle_increment  # Calculate angle of closest distance
 
+        print("distance_front ",self.distance_front)
+        print("min_distance ",self.min_distance)
+        print("angle_with_closet_obstacle ",self.angle_with_closet_obstacle)
         ## Get feedback from helper controller if applicable
         if self.helper_controller:
             angular_z = self.helper_controller.step(self.min_distance, self.angle_with_closet_obstacle)
@@ -115,7 +125,6 @@ class ScanTwistCenterControlNode:
 
     ## Read policy and Publish action
     def _execute(self):
-
         space_ahead = self.distance_front // self.dis_to_wall_desired               # Get how much space ahead of robot
 
         # Get linear(factor) and angular speed from policy
@@ -129,8 +138,10 @@ class ScanTwistCenterControlNode:
         # self.cmd_vel_pub.publish(self.twist)        # Action
         if self.twist.angular.z == 0:
             straight(self.cmd_vel_pub,self.twist.linear.x,1)
+            print("execute straight")
         else:
             turn_circle(self.cmd_vel_pub,1,1,1,self.twist.angular.z/(2*math.pi))
+            print("execute turn")
 
         print("Execute: ")
         print(self.twist)
