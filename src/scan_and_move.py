@@ -10,7 +10,7 @@ THRESHOLD=1
 def call_back(msg):
 
     move_topic = rospy.get_param("~move_topic", "/car/mux/ackermann_cmd_mux/input/navigation")
-    move_pub = rospy.Publisher("move_topic", AckermannDriveStamped, queue_size=1)
+    move_pub = rospy.Publisher(move_topic, AckermannDriveStamped, queue_size=1)
 
     ranges = msg.ranges[315:405]
     rospy.loginfo(ranges)
@@ -24,7 +24,7 @@ def call_back(msg):
     if check > len(ranges) / 2:
         # Turn car, there is a wall
         rospy.loginfo("There is a wall")
-        turn_circle(move_pub, 0.4, 1, 1, 0.25)
+        turn_circle(move_pub, 0.4, 1, 1, 0.1)
     else:
         # continue straight
         rospy.loginfo("Continue straight")
