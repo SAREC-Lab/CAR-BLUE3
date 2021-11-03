@@ -12,8 +12,9 @@ def call_back(msg):
     move_topic = rospy.get_param("~move_topic", "/car/mux/ackermann_cmd_mux/input/navigation")
     move_pub = rospy.Publisher("move_topic", AckermannDriveStamped, queue_size=1)
 
-    ranges = msg.ranges[315..405]
+    ranges = msg.ranges[315:405]
     rospy.loginfo(ranges)
+    ranges = [each for each in ranges if each>0.001]
 
     check = 0
     for val in ranges:
@@ -39,7 +40,7 @@ def main():
     move_pub = rospy.Publisher("move_topic", AckermannDriveStamped, queue_size=1)
 
     while not rospy.is_shutdown():
-        continue
+        rospy.spin()
     move_pub(AckermannDriveStamped())
 
 
