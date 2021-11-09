@@ -1,4 +1,4 @@
-## Use Case: Delive materials 
+## Use Case: Deliver Materials 
 
 **ID**: 001
 
