@@ -22,7 +22,7 @@ def call_back(msg):
     elif movement == "Right":
         turn_circle(move_pub, 0.4, 0, 1, 0.25)
     elif movement == "Stop":
-        move_pub(AckermannDriveStamped())
+        move_pub.publish(AckermannDriveStamped())
     else:
         rospy.loginfo("Invalid message received")
 
@@ -38,7 +38,7 @@ def main():
 
     while not rospy.is_shutdown():
         continue
-    move_pub(AckermannDriveStamped())
+    move_pub.publish(AckermannDriveStamped())
 
 
 if __name__ == '__main__':
