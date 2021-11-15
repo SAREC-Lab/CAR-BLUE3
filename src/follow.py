@@ -10,13 +10,14 @@ from states.utils import straight, turn_circle
 def call_back(msg):
 
     move_topic = rospy.get_param("~move_topic", "/car/mux/ackermann_cmd_mux/input/navigation")
-    move_pub = rospy.Publisher("move_topic", AckermannDriveStamped, queue_size=1)
+    move_pub = rospy.Publisher(move_topic, AckermannDriveStamped, queue_size=1)
 
     movement = msg.data
 
     # use util functions to move car
     if movement == "Drive":
-        straight(move_pub, 0.2, 1)
+        rospy.loginfo(msg.data)
+        straight(move_pub, 0.18, 1)
     elif movement == "Left":
         turn_circle(move_pub, 0.4, 1, 1, 0.25)
     elif movement == "Right":
