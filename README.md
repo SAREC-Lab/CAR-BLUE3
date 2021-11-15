@@ -31,6 +31,15 @@
 2. Connect to Car's wifi
 3. Go to the parent directory `cd ..` and run `rsync -rlptzv --progress --delete --exclude=.git ./CAR-BLUE3 "robot@10.42.0.1:~/catkin_ws/src"`
 
+### How to communicate across cars/turtlebots
+We just need one `roscore` running as the master server, and all the other clients can just pub/sub to this server by `export ROS_MASTER_URI=http://<master_server_ip_address_on_ND_guest>:11311`.
+
+We believe running the server on turtlebot (the 1st vehicle) would be the best choice so far.
+
+However, it is hard to communicate between 'rospy machines' and other devices, like mobile phone or laptops. We didn't find a way to install `rospy`
+on Mac. Even the laptop can reach to the master node's port successfully by `nc -vz <master_server_ip_address_on_ND_guest> 11311`, they can't communicate
+without `rospy`. We tried `paho.mqtt.client` but it can't connect.
+
 ## Documentation
 
 ### Domain Specific Language
