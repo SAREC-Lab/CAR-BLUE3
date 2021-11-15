@@ -16,7 +16,7 @@ def call_back(msg):
 
     # use util functions to move car
     if movement == "Drive":
-        straight(move_pub, 1, 1)
+        straight(move_pub, 0.2, 1)
     elif movement == "Left":
         turn_circle(move_pub, 0.4, 1, 1, 0.25)
     elif movement == "Right":
