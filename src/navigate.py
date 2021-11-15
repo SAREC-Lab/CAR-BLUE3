@@ -8,7 +8,7 @@ from std_msgs.msg import String
 #from states.utils import straight, turn_circle
 
 SCAN_TOPIC="/scan"
-MOVE_TOPIC="cmd_vel"
+MOVE_TOPIC="/cmd_vel"
 
 
 def call_back(msg):
@@ -29,11 +29,15 @@ def call_back(msg):
     move_cmd = Twist()
     if safe > (90 * 3 // 4):
         comms_pub.publish("Stop")
+        move_pub.publish(move_cmd)
     else:
-        move_cmd.linear.x = 0.3
+        move_cmd.linear.x = 0.2
+        move_pub.publish(move_cmd)
         rospy.loginfo("moving")
         comms_pub.publish("Drive")
-    move_pub.publish(move_cmd)
+
+#    rospy.sleep(1)
+#    move_pub.publish(move_cmd)
     # else
     # turn left or right
 
