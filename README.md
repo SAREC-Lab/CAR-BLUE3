@@ -3,7 +3,7 @@
 
 ### Important Links
 [Github Repository](https://github.com/SAREC-Lab/CAR-BLUE3/tree/main) <br />
-[Trello Board](https://trello.com/b/wCxuc2UZ/main-project)
+[Trello Board](https://trello.com/b/wCxuc2UZ/main-project) <br />
 [Navigation](https://emanual.robotis.com/docs/en/platform/turtlebot3/navigation/#navigation)
 
 ## Environment Setup
