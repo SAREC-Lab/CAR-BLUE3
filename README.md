@@ -1,5 +1,6 @@
 # Car - Blue 3
 
+
 ### Important Links
 [Github Repository](https://github.com/SAREC-Lab/CAR-BLUE3/tree/main) <br />
 [Trello Board](https://trello.com/b/wCxuc2UZ/main-project)
@@ -63,13 +64,3 @@ D1, controller.py, parser.py, instruction.py, plan_runner.py<br />
 D2, drive.py, stop.py, utils.py<br />
 D3, turn.py, utils.py<br />
 D4, circle.py, three_point.py, utils.py
-
-### Testing
-In order to test the program, we largely followed a trial-and-error style of approach; develop a segment of the code, then test it on the car, see what it does, then develop based on results. For example, for the simplest prompt - drive - we started by testing that the car would drive if prompted; after we knew it would drive, we tested if it would drive the right distance. After knowing it went the right distance, we tried going in different directions (in the case of reversing, due to our distance formula, it would reverse infinitely until it was interrupted on the first trial). We followed this method for each possible prompt - making sure the car would do its instructions for the correct duration, going the right distance, in the right direction, and at the right time. <br />
-Upon having every possible prompt satisfied, we implemented it with the state machine, and imported it on the car. After a few more tests ensuring that the state machine was functional (using test JSON files as input), the project was effectively completed.
-
-## Comments and Grades
-
-Good job in running experiments with the physical car, the traceability matrix could be better formatted (as shown in the assignment doc)
-
-** Grade: 100/100 **
