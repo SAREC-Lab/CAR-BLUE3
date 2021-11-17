@@ -9,15 +9,30 @@ from std_msgs.msg import String
 
 SCAN_TOPIC="/scan"
 MOVE_TOPIC="/cmd_vel"
+COMMANDS = list()
+x_coordinate=0
+y_coordinate=0
+
+'''
+Setup pub/sub from laptop to turtlebot with Point message 
+At beginning of call_back check if at desired point
+If there is a wall try to turn in the appropriate direction
+If there send Twist() (stop message) and sleep maybe?
+Then iterate over commands to publish them to car 
+'''
 
 
-def call_back(msg):
+def call_back_wrapper(msg):
 
-    comms_pub = rospy.Publisher("comms", String, queue_size=10)
+    call_back_scan(msg, COMMANDS)
+
+
+def call_back_scan(msg, COMMANDS=COMMANDS):
+
+#    comms_pub = rospy.Publisher("comms", String, queue_size=10)
     move_pub = rospy.Publisher(MOVE_TOPIC, Twist, queue_size=1)
 
-    # TODO check for obstacle based on msg.ranges
-    # what ranges[i] is front of turtlebot 
+    # what ranges[i] is in front of turtlebot 
     range = list(msg.ranges[0:45])
     range.extend(list(msg.ranges[315:360]))
 
@@ -28,31 +43,46 @@ def call_back(msg):
             safe += 1
     move_cmd = Twist()
     if safe > (90 * 3 // 4):
-        comms_pub.publish("Stop")
+        COMMANDS.append("Stop")
+#        comms_pub.publish("Stop")
         move_pub.publish(move_cmd)
     else:
         move_cmd.linear.x = 0.2
         move_pub.publish(move_cmd)
         rospy.loginfo("moving")
-        comms_pub.publish("Drive")
-
-#    rospy.sleep(1)
-#    move_pub.publish(move_cmd)
-    # else
-    # turn left or right
+        COMMANDS.append("Drive")
+#        comms_pub.publish("Drive")
 
     # TODO publish message to car topic based on obstacle/tbot movement
-    # comms_pub.Publish("Drive")
-    # comms_pub.Publish("Stop")
-    # comms_pub.Publish("Left")
-    # comms_pub.Publish("Right")
+
+
+def call_back_pose(msg):
+
+    point = msg.pose.pose
+    # TODO determine when Turtlebot reaches destination
+    # and then send plan to car 
+    '''
+#    comms_pub = rospy.Publisher("comms", String, queue_size=10)
+    for cmd in COMMANDS
+        comms_pub.publish(cmd)
+    '''
+
+
+def get_coordinates(point):
+
+    global x_coordinate
+    global y_coordinate
+    x_coordinate = point.x
+    y_coordinate = point.y
 
 
 def main():
 
     rospy.init_node("navigate")
 
-    scan_sub = rospy.Subscriber(SCAN_TOPIC, LaserScan, call_back)
+    coordinates_sub = rospy.Subscriber("coordinates", Point, get_coordinates)
+    scan_sub = rospy.Subscriber(SCAN_TOPIC, LaserScan, call_back_wrapper)
+    point_sub = rospy.Subscriber('/odom', Odometry, call_back_pose)
 
     move_pub = rospy.Publisher(MOVE_TOPIC, Twist, queue_size=1)
 
