@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+import numpy as np
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist, Point, Pose
 from nav_msgs.msg import Odometry
@@ -11,6 +12,7 @@ MOVE_TOPIC="/cmd_vel"
 COMMANDS=list()
 x_coord=0
 y_coord=0
+TARGET_RANGE = .1
 TARGET=False
 
 def call_back_scan(msg, COMMANDS=COMMANDS):
@@ -39,19 +41,19 @@ def call_back_scan(msg, COMMANDS=COMMANDS):
         rospy.loginfo("Drive forward")
         COMMANDS.append("Drive")
 
-    move_pub.publish(move_cmd)
+    move_pub.publish(move_cmd) # Might need to send the message with some constant frequency
 
 
 def call_back_pose(msg):
 
     global TARGET
     point = msg.pose.pose
+    current = np.array([point.x,point.y])
+    target = np.array([x_coord,y_coord])
 
-    if (point.x - 0.1 < x_coord < point.x + 0.1) and (point.y - 0.1 < y_coord
-            < point.y + 0.1):
-        if not TARGET:
-            COMMANDS.append("Stop")
-            send_plan()
+    if np.linalg.norm(current-target) <= TARGET_RANGE and not TARGET: # Euclidean distance
+        COMMANDS.append("Stop")
+        send_plan()
         TARGET = True
 
 
@@ -60,14 +62,17 @@ def send_plan(COMMANDS=COMMANDS):
     comms_pub = rospy.Publisher("comms", String, queue_size=10)
     for cmd in COMMANDS:
         comms_pub.publish(cmd)
+    del COMMANDS[:] # clean the COMMANDS list
 
 
 def get_coordinates(point):
 
+    global TARGET
     global x_coord
     global y_coord
     x_coord = point.x
     y_coord = point.y
+    TARGET = False # Once get new coordinate, set it to False
 
 
 def main():
