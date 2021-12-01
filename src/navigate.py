@@ -21,11 +21,13 @@ If there send Twist() (stop message) and sleep maybe?
 Then iterate over commands to publish them to car 
 '''
 
+'''
+I don't think this is necessary because of COMMANDS=COMMANDS
 
 def call_back_wrapper(msg):
 
     call_back_scan(msg, COMMANDS)
-
+'''
 
 def call_back_scan(msg, COMMANDS=COMMANDS):
 
@@ -61,11 +63,20 @@ def call_back_pose(msg):
     point = msg.pose.pose
     # TODO determine when Turtlebot reaches destination
     # and then send plan to car 
-    '''
-#    comms_pub = rospy.Publisher("comms", String, queue_size=10)
-    for cmd in COMMANDS
+   
+    if (point.x - 0.1 < x_coordinate < point.x + 0.1) and (point.y - 0.1
+    < y_coordinate < point.y + 0.1):
+        send_plan()
+        comms_pub = rospy.Publisher("comms", String, queue_size=10)
+        for cmd in COMMANDS: 
+            comms_pub.publish(cmd)
+    
+
+def send_plan(COMMANDS=COMMANDS):
+
+    comms_pub = rospy.Publisher("comms", String, queue_size=10)
+    for cmd in COMMANDS:
         comms_pub.publish(cmd)
-    '''
 
 
 def get_coordinates(point):
@@ -81,7 +92,7 @@ def main():
     rospy.init_node("navigate")
 
     coordinates_sub = rospy.Subscriber("coordinates", Point, get_coordinates)
-    scan_sub = rospy.Subscriber(SCAN_TOPIC, LaserScan, call_back_wrapper)
+    scan_sub = rospy.Subscriber(SCAN_TOPIC, LaserScan, call_back_scan)
     point_sub = rospy.Subscriber('/odom', Odometry, call_back_pose)
 
     move_pub = rospy.Publisher(MOVE_TOPIC, Twist, queue_size=1)
