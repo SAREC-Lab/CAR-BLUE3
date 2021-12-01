@@ -32,7 +32,7 @@ def call_back_scan(msg, COMMANDS=COMMANDS):
         rospy.loginfo("Target reached")
         COMMANDS.append("Stop")
     elif safe > (90 * 3 // 4):
-        move_cmd.angular.z = 0.2
+        move_cmd.angular.z = 0.5
         rospy.loginfo("Wall. Stop and turn")
         if COMMANDS[-1] is not "Turn": 
             COMMANDS.append("Turn")
@@ -47,7 +47,7 @@ def call_back_scan(msg, COMMANDS=COMMANDS):
 def call_back_pose(msg):
 
     global TARGET
-    point = msg.pose.pose
+    point = msg.pose.pose.point
     current = np.array([point.x,point.y])
     target = np.array([x_coord,y_coord])
 
