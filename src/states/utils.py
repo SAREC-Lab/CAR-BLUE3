@@ -11,23 +11,22 @@ def straight(publisher, distance, forward, time=None):
     current_distance = 0
     t0 = rospy.Time.now().to_sec()
 
-#    rate = rospy.Rate(10)
+    rate = rospy.Rate(10)
 
-    speed = 0.15 # default 1 m/s 
+    speed = 1.0 # default 1 m/s 
     if not forward: 
         speed = speed*(-1) # check reverse or forward
 
     drive = AckermannDrive(steering_angle=0, speed=speed)
-    publisher.publish(AckermannDriveStamped(drive=drive))
-'''
+
     # loop until distance is reached, publishing the message 
     while abs(current_distance) < distance:
         publisher.publish(AckermannDriveStamped(drive=drive))
         t1 = rospy.Time.now().to_sec()
         current_distance = speed * (t1 - t0)
         rate.sleep()
-'''
-#    rospy.sleep(1)
+
+    rospy.sleep(1)
 
 
 def turn_circle(publisher, radius, left, forward, circle_numbers, time=None):

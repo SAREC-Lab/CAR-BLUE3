@@ -14,36 +14,42 @@ def call_back(msg, PLAN=PLAN):
     move_pub = rospy.Publisher(move_topic, AckermannDriveStamped, queue_size=1)
 
     movement = msg.data
+    rospy.loginfo(msg.data)
 
     # use util functions to move car
     if movement == "Stop":
-        use_plan()
+        use_plan(move_pub)
         move_pub.publish(AckermannDriveStamped())
 
-    rospy.loginfo(msg.data)
     PLAN.append(msg.data)
-'''
-    if movement == "Drive":
-        rospy.loginfo(msg.data)
-        PLAN.append(msg.data)
-#        straight(move_pub, 0.18, 1)
-    elif movement == "Left":
-#        turn_circle(move_pub, 0.4, 1, 1, 0.25)
-    elif movement == "Right":
-#        turn_circle(move_pub, 0.4, 0, 1, 0.25)
-    elif movement == "Stop":
-        use_plan()
-        move_pub.publish(AckermannDriveStamped())
-    else:
-        rospy.loginfo("Invalid message received")
-'''
 
-def use_plan(PLAN=PLAN):
+
+def use_plan(move_pub, PLAN=PLAN):
 
     # TODO check how many drives before a turn
     # one drive command equates to 0.04 m to travel 
     # use that with straight and move_pub
     # then at a turn, simply turn_circle
+    new_plan = list()
+    drive = 0
+    while PLAN:
+        cmd = PLAN.pop(0)
+        if cmd == "Drive":
+            drive += 0.04
+        elif cmd == "Turn":
+            drive -= 0.4
+            new_plan.append(drive)
+            drive = 0
+            new_plan.append(cmd)
+
+    for cmd in new_plan:
+        if cmd == "Turn":
+            turn_circle(move_pub, 0.4, 1, 1, 0.25)
+        else:
+            if cmd < 0:
+                straight(move_pub, cmd, 0)
+            else:
+                straight(move_pub, cmd, 1)
 
 
 def main():
