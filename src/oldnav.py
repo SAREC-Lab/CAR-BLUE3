@@ -10,9 +10,9 @@ from std_msgs.msg import String
 SCAN_TOPIC="/scan"
 MOVE_TOPIC="/cmd_vel"
 COMMANDS=list()
-x_coord=2
-y_coord=2
-TARGET_RANGE = 1.0
+x_coord=0
+y_coord=0
+TARGET_RANGE = .1
 TARGET=False
 
 def call_back_scan(msg, COMMANDS=COMMANDS):
@@ -24,7 +24,7 @@ def call_back_scan(msg, COMMANDS=COMMANDS):
 
     safe = 0
     for val in range:
-        if val < 0.75 and val > 0:
+        if val < 0.4 and val > 0:
             safe += 1
 
     move_cmd = Twist()
@@ -32,9 +32,9 @@ def call_back_scan(msg, COMMANDS=COMMANDS):
         rospy.loginfo("Target reached")
         COMMANDS.append("Stop")
     elif safe > (90 * 3 // 4):
-        move_cmd.angular.z = 2.5
+        move_cmd.angular.z = 0.5
         rospy.loginfo("Wall. Stop and turn")
-        if COMMANDS[-1] is not "Turn":
+        if COMMANDS[-1] is not "Turn": 
             COMMANDS.append("Turn")
     else:
         move_cmd.linear.x = 0.2
@@ -47,22 +47,18 @@ def call_back_scan(msg, COMMANDS=COMMANDS):
 def call_back_pose(msg):
 
     global TARGET
-    point = msg.pose.pose.position
+    point = msg.pose.pose.point
     current = np.array([point.x,point.y])
     target = np.array([x_coord,y_coord])
 
     if np.linalg.norm(current-target) <= TARGET_RANGE and not TARGET: # Euclidean distance
-        rospy.loginfo("Destination Reached")
         COMMANDS.append("Stop")
-        print(COMMANDS)
         send_plan()
         TARGET = True
 
 
 def send_plan(COMMANDS=COMMANDS):
 
-    print(COMMANDS)
-    rospy.loginfo("Sending plan")
     comms_pub = rospy.Publisher("comms", String, queue_size=10)
     for cmd in COMMANDS:
         comms_pub.publish(cmd)
@@ -89,16 +85,10 @@ def main():
 
     move_pub = rospy.Publisher(MOVE_TOPIC, Twist, queue_size=1)
 
-    rate = rospy.Rate(10)
     while not rospy.is_shutdown():
-        rate.sleep()
+        continue
     move_pub.publish(Twist())
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except:
-        move_pub = rospy.Publisher(MOVE_TOPIC, Twist, queue_size=1)
-        rospy.loginfo("Interrupt!")
-        move_pub.publish(Twist())
+    main()
