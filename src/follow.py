@@ -43,7 +43,9 @@ def use_plan(move_pub, PLAN=PLAN):
             new_plan.append(drive)
             drive = 0
             new_plan.append(cmd)
+    new_plan.append(drive)
 
+    print(new_plan)
     for cmd in new_plan:
         if cmd == "Turn":
             tb_turn(move_pub, 1)
