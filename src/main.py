@@ -15,20 +15,16 @@ def enter():
     p.y = point[1]
     coordinates_pub.publish(p)
 
-def main():
+# Main Execution
+rospy.init_node("master")
 
-    rospy.init_node("master")
+window = tk.Tk()
+window.geometry('500x400')
+l1 = tk.Label(window, text='Point (Enter as "x,y"):')
+l1.pack()
+e1 = tk.Entry(window, bd =5)
+e1.pack()
+b1 = tk.Button(window, text="Enter", command=enter)
+b1.pack()
 
-    window = tk.Tk()
-    window.geometry('500x400')
-    l1 = tk.Label(window, text='Point (Enter as "x,y"):')
-    l1.pack()
-    e1 = tk.Entry(window, bd =5)
-    e1.pack()
-    b1 = tk.Button(window, text="Enter", command=enter)
-    b1.pack()
-
-    window.mainloop()
-
-if __name__ == '__main__':
-    main()
+window.mainloop()
