@@ -20,8 +20,9 @@ def call_back(msg, PLAN=PLAN):
     if movement == "Stop":
         use_plan(move_pub)
         move_pub.publish(AckermannDriveStamped())
-
-    PLAN.append(msg.data)
+        del PLAN
+    else:
+        PLAN.append(msg.data)
 
 
 def use_plan(move_pub, PLAN=PLAN):
@@ -30,6 +31,8 @@ def use_plan(move_pub, PLAN=PLAN):
     # one drive command equates to 0.04 m to travel 
     # use that with straight and move_pub
     # then at a turn, simply turn_circle
+    if len(PLAN) == 0: return
+
     new_plan = list()
     drive = 0
     while PLAN:
@@ -37,14 +40,13 @@ def use_plan(move_pub, PLAN=PLAN):
         if cmd == "Drive":
             drive += 0.04
         elif cmd == "Turn":
-            drive -= 0.4
             new_plan.append(drive)
             drive = 0
             new_plan.append(cmd)
 
     for cmd in new_plan:
         if cmd == "Turn":
-            turn_circle(move_pub, 0.4, 1, 1, 0.25)
+            tb_turn(move_pub, 1)
         else:
             if cmd < 0:
                 straight(move_pub, cmd, 0)
@@ -59,7 +61,7 @@ def tb_turn(move_pub,left):
     2. The car then will do a turn by a quarterly circle.
     3. The car will move backward 
     """
-    RADIUS = 0.5 # Might need to tune this to make a turn in the hall way
+    RADIUS = 0.4 # Might need to tune this to make a turn in the hall way
     NUMBER_OF_CIRCLE = 0.25 # Theoretically it should only turn 1/4 circle. but may require change in practice
     straight(move_pub,RADIUS,0)
     turn_circle(move_pub,RADIUS,left,1,NUMBER_OF_CIRCLE)
