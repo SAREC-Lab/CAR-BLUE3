@@ -1,19 +1,34 @@
 #!/usr/bin/env python
 
 import rospy
+import Tkinter as tk
 from geometry_msgs.msg import Point
+
+def enter():
+    l2 = tk.Label(window, text="Submitted. Turtlebot ready to move!")
+    l2.pack()
+    print(e1.get())
+    point = list(map(int, e1.get().strip().split(',')))
+    coordinates_pub = rospy.Publisher("coordinates", Point, queue_size=10)
+    p = Point()
+    p.x = point[0]
+    p.y = point[1]
+    coordinates_pub.publish(p)
 
 def main():
 
     rospy.init_node("master")
 
-    coordinates_pub = rospy.Publisher("coordinates", Point, queue_size=10)
+    window = tk.Tk()
+    window.geometry('500x400')
+    l1 = tk.Label(window, text='Point (Enter as "x,y"):')
+    l1.pack()
+    e1 = tk.Entry(window, bd =5)
+    e1.pack()
+    b1 = tk.Button(window, text="Enter", command=enter)
+    b1.pack()
 
-    # TODO Get point from input and publish
-    p = Point()
-    p.x = 3
-    p.y = 3
-    coordinates_pub.publish(p)
+    window.mainloop()
 
 if __name__ == '__main__':
     main()
