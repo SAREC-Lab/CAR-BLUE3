@@ -19,7 +19,11 @@
 3. On Turtlebot, set up the Rospy master for turtlebot by `export ROS_MASTER_URI=http://<master_server_ip_address_on_ND_guest>:11311`.
 4. Bring up the turtlebot by `roslaunch turtlebot3_bringup turtlebot3_robot.launch`.
 5. (Optional) If you want to put it in a saved map for visualization, run `export TURTLEBOT3_MODEL=burger` and `roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=$HOME/map.yaml`. Be sure to perform Initial Pose Estimation.
-6. Run the script in this repo with `python src/main.py` on laptop.
+6. On the car `roslaunch mushr_base teleop.launch`.
+7. Run the script in this repo with `python src/main.py` on laptop.
+8. Run the script in this repo with `python src/nav.py` on laptop.
+9. Run the script in this repo with `python src/follow.py` on car. 
+10. (Optional) to visualize the position run `rostopic echo /odom` on laptop.
 
 
 ## Documentation
