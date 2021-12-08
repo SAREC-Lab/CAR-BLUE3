@@ -10,8 +10,8 @@ from std_msgs.msg import String
 SCAN_TOPIC="/scan"
 MOVE_TOPIC="/cmd_vel"
 COMMANDS=list()
-x_coord=2
-y_coord=2
+x_coord=0
+y_coord=0
 TARGET_RANGE = 1.0
 TARGET=False
 
@@ -30,7 +30,8 @@ def call_back_scan(msg, COMMANDS=COMMANDS):
     move_cmd = Twist()
     if TARGET:
         rospy.loginfo("Target reached")
-        COMMANDS.append("Stop")
+        if COMMANDS and COMMANDS[-1] is not "Stop":
+            COMMANDS.append("Stop")
     elif safe > (90 * 3 // 4):
         move_cmd.angular.z = 2.5
         rospy.loginfo("Wall. Stop and turn")
@@ -88,6 +89,7 @@ def main():
     point_sub = rospy.Subscriber('/odom', Odometry, call_back_pose)
 
     move_pub = rospy.Publisher(MOVE_TOPIC, Twist, queue_size=1)
+    comms_pub = rospy.Publisher("comms", String, queue_size=10)
 
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():
