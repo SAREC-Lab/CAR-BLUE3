@@ -20,7 +20,7 @@ def call_back(msg, PLAN=PLAN):
     if movement == "Stop":
         use_plan(move_pub)
         move_pub.publish(AckermannDriveStamped())
-        del PLAN
+        del PLAN[:]
     else:
         PLAN.append(msg.data)
 

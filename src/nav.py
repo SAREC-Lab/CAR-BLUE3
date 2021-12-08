@@ -24,7 +24,7 @@ def call_back_scan(msg, COMMANDS=COMMANDS):
 
     safe = 0
     for val in range:
-        if val < 0.75 and val > 0:
+        if val < 1.5 and val > 0:
             safe += 1
 
     move_cmd = Twist()
