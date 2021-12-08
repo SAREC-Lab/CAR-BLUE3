@@ -18,6 +18,7 @@ def enter():
 # Main Execution
 rospy.init_node("master")
 
+coordinates_pub = rospy.Publisher("coordinates", Point, queue_size=10)
 window = tk.Tk()
 window.geometry('500x400')
 l1 = tk.Label(window, text='Point (Enter as "x,y"):')
