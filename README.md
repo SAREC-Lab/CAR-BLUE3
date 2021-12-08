@@ -12,31 +12,15 @@
 
 2. Run `catkin_make` to install this package
 
-## How to Run the Car
+## Usage
 
-### Real Car
+1. Run roscore on the laptop: `roscore`.
+2. On the laptop, write down the ip address by `ipconfig`.
+3. On Turtlebot, set up the Rospy master for turtlebot by `export ROS_MASTER_URI=http://<master_server_ip_address_on_ND_guest>:11311`.
+4. Bring up the turtlebot by `roslaunch turtlebot3_bringup turtlebot3_robot.launch`.
+5. (Optional) If you want to put it in a saved map for visualization, run `export TURTLEBOT3_MODEL=burger` and `roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=$HOME/map.yaml`. Be sure to perform Initial Pose Estimation.
+6. Run the script in this repo with `python src/main.py` on laptop.
 
-1. Run `roslaunch mushr_base teleop.launch`
-2. Run `roslaunch CAR-BLUE3 path_publisher.launch`
-    1. To specify the plan file, `roslaunch CAR-BLUE3 path_publisher.launch plan_file:='/path/to/plan.txt'`
-
-### Simulation
-1. `roslaunch mushr_sim teleop.launch`
-2. `rosrun rviz rviz -d $HOME/catkin_ws/src/mushr/mushr_utils/rviz/default.rviz`
-3. `roslaunch CAR-BLUE3 path_publisher.launch`
-
-*Don’t forget: $ shutdown now*
-
-
-### Push Code to the Car
-1. Pull Code to the local repo
-2. Connect to Car's wifi
-3. Go to the parent directory `cd ..` and run `rsync -rlptzv --progress --delete --exclude=.git ./CAR-BLUE3 "robot@10.42.0.1:~/catkin_ws/src"`
-
-### How to communicate across cars/turtlebots
-We just need one `roscore` running as the master server, and all the other clients can just pub/sub to this server by `export ROS_MASTER_URI=http://<master_server_ip_address_on_ND_guest>:11311`.
-
-We believe running the server on laptop would be the best choice so far.
 
 ## Documentation
 
@@ -61,3 +45,30 @@ D1, controller.py, parser.py, instruction.py, plan_runner.py<br />
 D2, drive.py, stop.py, utils.py<br />
 D3, turn.py, utils.py<br />
 D4, circle.py, three_point.py, utils.py
+
+
+## Legacy
+
+### Real Car
+
+1. Run `roslaunch mushr_base teleop.launch`
+2. Run `roslaunch CAR-BLUE3 path_publisher.launch`
+    1. To specify the plan file, `roslaunch CAR-BLUE3 path_publisher.launch plan_file:='/path/to/plan.txt'`
+
+### Simulation
+1. `roslaunch mushr_sim teleop.launch`
+2. `rosrun rviz rviz -d $HOME/catkin_ws/src/mushr/mushr_utils/rviz/default.rviz`
+3. `roslaunch CAR-BLUE3 path_publisher.launch`
+
+*Don’t forget: $ shutdown now*
+
+
+### Push Code to the Car
+1. Pull Code to the local repo
+2. Connect to Car's wifi
+3. Go to the parent directory `cd ..` and run `rsync -rlptzv --progress --delete --exclude=.git ./CAR-BLUE3 "robot@10.42.0.1:~/catkin_ws/src"`
+
+### How to communicate across cars/turtlebots
+We just need one `roscore` running as the master server, and all the other clients can just pub/sub to this server by `export ROS_MASTER_URI=http://<master_server_ip_address_on_ND_guest>:11311`.
+
+We believe running the server on laptop would be the best choice so far.
