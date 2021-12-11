@@ -26,6 +26,11 @@ Follow the Leader uses a **main turtlebot** to guide other **autonomous vehicles
 ## Design
 
 ## Testing
+Testing had a few main components: basic functionality, movement, communication, and detection. <br />
+Basic functionality focused on making sure we could parse inputs properly, and that the code itself didn't have any issues. Primarily, this involved the construction of the task plan for the car via the turtlebot's pathing, which we had to make multiple attempts at figuring out proper parameters for.<br />
+Movement focused on making sure both the turtlebot and car could move properly. We had experience with the car prior to the project, but none with the turtlebot. After learning how to make the turtlebot move properly, and doing some more specific measurements on the car's movement, particularly its turns, we moved on to communication.<br />
+Communication focused on getting instructions from the turtlebot to the car. We thought about a few different possibilities for this, before settling on a state machine-like task plan the turtlebot would build before sending the process to the car to execute upon.<br />
+Detection focused on navigating past obstacles in the turtlebot's path; the reason it is 'the turtlebot' and not 'the vehicles,' is because the turtlebot's plan would let the car navigate around obstacles without needing LiDAR active. Figuring out the most efficient way for the turtlebot to avoid obstacles while still making a competent plan for the car was tricky, though we managed to come up with a suitably functional method of keeping proper distance within the plan should an obstacle be detected.
 
 ## Interface Example
 ![IMG_3058](https://user-images.githubusercontent.com/78926321/145498040-2b8227b3-a391-4e31-9249-aef3a8b236d3.jpg)
