@@ -17,7 +17,11 @@ Follow the Leader uses a **main turtlebot** to guide other **autonomous vehicles
 - LiDAR: Light Detection and Ranging is a remote sensing method that uses
   pulsing lasers to measure ranges to objects around
 
-## Requirements
+## Requirements/Plan
+1. Main turtlebot and autonomous vehicle will start lined up, turtlebot in front
+2. User will send a set of X, Y coordinates (in meters) to the main turtlebot
+3. Main turtlebot will navigate to the GPS Location using LiDAR
+4. Using the main turtlebot's path, the autonomous vehicle will navigate to the GPS position where the main turtlebot finished
 
 ## Design
 
