@@ -43,7 +43,7 @@ The interface is simple to use. All the user must do is enter a set of X-Y coord
 ![IMG_3058](https://user-images.githubusercontent.com/78926321/145498040-2b8227b3-a391-4e31-9249-aef3a8b236d3.jpg)
 
 ## Demo
-<p align="center">
-  [![IMAGE ALT TEXT](http://img.youtube.com/vi/yrDb6ASoK2Y/0.jpg)](https://youtu.be/yrDb6ASoK2Y "Demo")
-</p>
+
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/yrDb6ASoK2Y/0.jpg)](https://youtu.be/yrDb6ASoK2Y "Demo")
+<br />
 ![IMG_3057](https://user-images.githubusercontent.com/78926321/145498103-fb40add2-ff4c-49fe-be2d-07391b3d0129.jpeg)
