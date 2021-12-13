@@ -23,7 +23,12 @@ Follow the Leader uses a **main turtlebot** to guide other **autonomous vehicles
 3. Main turtlebot will navigate to the GPS Location using LiDAR
 4. Using the main turtlebot's path, the autonomous vehicle will navigate to the GPS position where the main turtlebot finished
 
-## Design
+## Design/Architecture
+Our project has four primary files: **main.py**, **nav.py**, **follow.py**, and **utils.py**.
+- **main.py** constructs the primary UI for the project, presenting it to the user (for example, see *Interface* below). Data from main.py is published and subsequently passed into nav.py.
+- **nav.py** controls the turtlebot. Taking the input from main.py, the program makes the base assumption that the turtlebot is at (0, 0) facing along the positive X-axis. Using ROS, it moves the turtlebot forward until either it reaches the appropriate X-coordinate, or hits an obstacle. In either case, it turns to face along the Y-axis once it reaches a stopping point, and proceeds to attempt to reach the Y-coordinate, until one of the aforementioned scenarios happens with the Y-coordinate. Along the way, it crafts a series of commands for the car to drive or turn, ultimately sending the plan to the car.
+- **follow.py** controls the car. Taking the plan from nav.py, the car (roughly) follows along the turtlebot's path, using the plan given until it runs out of commands.
+- **utils.py** contains the specifics of the drive commands for the car.
 
 ## Testing
 Testing had a few main components: basic functionality, movement, communication, and detection. <br />
@@ -32,7 +37,8 @@ Testing had a few main components: basic functionality, movement, communication,
 - *Communication* focused on getting instructions from the turtlebot to the car. We thought about a few different possibilities for this, before settling on a state machine-like task plan the turtlebot would build before sending the process to the car to execute upon.<br />
 - *Detection* focused on navigating past obstacles in the turtlebot's path; the reason it is 'the turtlebot' and not 'the vehicles,' is because the turtlebot's plan would let the car navigate around obstacles without needing LiDAR active. Figuring out the most efficient way for the turtlebot to avoid obstacles while still making a competent plan for the car was tricky, though we managed to come up with a suitably functional method of keeping proper distance within the plan should an obstacle be detected.
 
-## Interface Example
+## Interface
+The interface is simple to use. All the user must do is enter a set of X-Y coordinates, separated by a comma, and submit. The program assumes the turtlebot's initial position as the effective origin point (0, 0).
 ![IMG_3058](https://user-images.githubusercontent.com/78926321/145498040-2b8227b3-a391-4e31-9249-aef3a8b236d3.jpg)
 
 ## Demo
