@@ -38,9 +38,12 @@ Testing had a few main components: basic functionality, movement, communication,
 - *Detection* focused on navigating past obstacles in the turtlebot's path; the reason it is 'the turtlebot' and not 'the vehicles,' is because the turtlebot's plan would let the car navigate around obstacles without needing LiDAR active. Figuring out the most efficient way for the turtlebot to avoid obstacles while still making a competent plan for the car was tricky, though we managed to come up with a suitably functional method of keeping proper distance within the plan should an obstacle be detected.
 
 ## Interface
-The interface is simple to use. All the user must do is enter a set of X-Y coordinates, separated by a comma, and submit. The program assumes the turtlebot's initial position as the effective origin point (0, 0).
+The interface is simple to use. All the user must do is enter a set of X-Y coordinates, separated by a comma, and submit. The program assumes the turtlebot's initial position as the effective origin point (0, 0). <br />
+
 ![IMG_3058](https://user-images.githubusercontent.com/78926321/145498040-2b8227b3-a391-4e31-9249-aef3a8b236d3.jpg)
 
 ## Demo
-[![IMAGE ALT TEXT](http://img.youtube.com/vi/yrDb6ASoK2Y/0.jpg)](https://youtu.be/yrDb6ASoK2Y "Demo")
+<p align="center">
+  [![IMAGE ALT TEXT](http://img.youtube.com/vi/yrDb6ASoK2Y/0.jpg)](https://youtu.be/yrDb6ASoK2Y "Demo")
+</p>
 ![IMG_3057](https://user-images.githubusercontent.com/78926321/145498103-fb40add2-ff4c-49fe-be2d-07391b3d0129.jpeg)
